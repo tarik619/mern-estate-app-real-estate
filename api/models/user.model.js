@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+      default: "https://xsgames.co/randomusers/assets/images/favicon.png",
+    },
   },
   { timestamps: true }
 );
