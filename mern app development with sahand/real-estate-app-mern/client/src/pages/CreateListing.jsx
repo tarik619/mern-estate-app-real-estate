@@ -8,8 +8,10 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CreateListing = () => {
+  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
@@ -21,7 +23,7 @@ const CreateListing = () => {
     bedrooms: 1,
     bathrooms: 1,
     regularPrice: 50,
-    discountPrice: 50,
+    discountPrice: 0,
     offer: false,
     parking: false,
     furnished: false,
@@ -142,6 +144,7 @@ const CreateListing = () => {
       if (data.success === false) {
         setError(data.message);
       }
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
     }
@@ -278,22 +281,25 @@ const CreateListing = () => {
                 <span className="text-xs">($ / month)</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                className="p-3 border border-gray-400 rounded-lg"
-                id="discountPrice"
-                min="50"
-                max="10000000"
-                required
-                onChange={handleChange}
-                value={formData.discountPrice}
-              />
-              <div className="flex flex-col items-center">
-                <p>Discounted price</p>
-                <span className="text-xs">($ / month)</span>
+            {formData.offer && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  className="p-3 border border-gray-400 rounded-lg"
+                  id="discountPrice"
+                  min="0"
+                  max="10000000"
+                  required
+                  onChange={handleChange}
+                  value={formData.discountPrice}
+                />
+
+                <div className="flex flex-col items-center">
+                  <p>Discounted price</p>
+                  <span className="text-xs">($ / month)</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         <div className="gap-4 flex flex-col flex-1">
@@ -342,7 +348,10 @@ const CreateListing = () => {
                 </button>
               </div>
             ))}
-          <button className="p-3 rounded-lg uppercase text-white bg-slate-700 hover:opacity-95 disabled:opacity-80 mt-4">
+          <button
+            disabled={loading || uploading}
+            className="p-3 rounded-lg uppercase text-white bg-slate-700 hover:opacity-95 disabled:opacity-80 mt-4"
+          >
             {loading ? "Creating..." : "Create Listing"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
