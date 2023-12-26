@@ -16,10 +16,9 @@ import {
   deleteUserFailure,
   signOutUserFailure,
   signOutUserStart,
-  signInSuccess,
   signOutUserSuccess,
 } from "../redux/user/userSlice";
-import { Link, useRevalidator } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 const Profile = () => {
