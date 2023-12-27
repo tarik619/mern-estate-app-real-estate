@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  signInStart,
-  signInSuccess,
-  signInFailure,
+  signUpStart,
+  signUpSuccess,
+  signUpFailure,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
 
@@ -22,8 +22,8 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signInStart());
-      const res = await fetch("/api/auth/signin", {
+      dispatch(signUpStart());
+      const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,13 +32,13 @@ const SignUp = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        dispatch(signInFailure(data.message));
+        dispatch(signUpFailure(data.message));
         return;
       }
-      dispatch(signInSuccess(data));
+      dispatch(signUpSuccess(data));
       navigate("/");
     } catch (error) {
-      dispatch(signInFailure(error.message));
+      dispatch(signUpFailure(error.message));
     }
   };
 
